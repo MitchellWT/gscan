@@ -2,7 +2,6 @@ package gscan
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -12,12 +11,7 @@ func init() {
 	linuxIgnore = append(linuxIgnore, "proc", "run", "dev", "sys")
 }
 
-func errorCheck(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
+// Search ignore arrays for passed in string
 func ignoreSearch(dirName string, ignoreArr []string) bool {
 	for _, ignoreDir := range ignoreArr {
 		if ignoreDir == dirName {
@@ -27,8 +21,9 @@ func ignoreSearch(dirName string, ignoreArr []string) bool {
 	return false
 }
 
-func GetAllFiles(rootFile string, allFiles []ScanFile) []ScanFile {
-	files, err := ioutil.ReadDir(rootFile)
+// Recursively gets all files in the provided root directory
+func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
+	files, err := ioutil.ReadDir(rootDir)
 	errorCheck(err)
 
 	for _, file := range files {
@@ -36,13 +31,14 @@ func GetAllFiles(rootFile string, allFiles []ScanFile) []ScanFile {
 			if ignoreSearch(file.Name(), linuxIgnore) {
 				continue
 			}
-			allFiles = GetAllFiles(rootFile+"/"+file.Name(), allFiles)
+			allFiles = GetAllFiles(rootDir+"/"+file.Name(), allFiles)
 		} else {
+			// Check If file is a Symlink, ignore
 			if file.Mode()&os.ModeSymlink == os.ModeSymlink {
 				continue
 			}
 			allFiles = append(allFiles, ScanFile{
-				Path: rootFile + "/" + file.Name(),
+				Path: rootDir + "/" + file.Name(),
 				Size: file.Size(),
 			})
 		}
