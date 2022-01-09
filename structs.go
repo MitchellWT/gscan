@@ -1,7 +1,5 @@
 package gscan
 
-import "log"
-
 // ScanFile stores the minimal file information used in the applicaiton
 type ScanFile struct {
 	Path string
@@ -10,14 +8,7 @@ type ScanFile struct {
 
 // ScanData stores the information that will be saved in /var/lib/scan/data
 type ScanData struct {
-	DateTime  string
+	UnixTime  int64
 	RootDir   string
 	ScanFiles []ScanFile
-}
-
-// Used to log errors and exit out of application
-func errorCheck(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/MitchellWT/gscan"
@@ -22,10 +23,12 @@ func getRuntimeArgs() []string {
 
 func main() {
 	// Get root file directory
-	rootFile := getRuntimeArgs()[0]
-	allFiles := make([]gscan.ScanFile, 0)
+	//rootFile := getRuntimeArgs()[0]
+	//allFiles := make([]gscan.ScanFile, 0)
 	// Get all files in root directory
-	allFiles = gscan.GetAllFiles(rootFile, allFiles)
+	//allFiles = gscan.GetAllFiles(rootFile, allFiles)
 	// Save recorded files to /var/lib/gscan/data/
-	gscan.SaveToFile(rootFile, allFiles)
+	//gscan.SaveToFile(rootFile, allFiles)
+	collectedMap := gscan.CollectRaw("/home/mitchell/Scripts", 1641721436, 1641741436)
+	fmt.Println(collectedMap)
 }
