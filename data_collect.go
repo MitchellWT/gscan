@@ -21,7 +21,7 @@ func ignoreSearch(dirName string, ignoreArr []string) bool {
 	return false
 }
 
-// Recursively gets all files in the provided root directory
+// GetAllFiles recursively gets all files in the provided root directory
 func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 	files, err := ioutil.ReadDir(rootDir)
 	errorCheck(err)
