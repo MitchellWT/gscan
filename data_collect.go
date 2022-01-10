@@ -75,8 +75,18 @@ func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 	return collectedMap
 }
 
-// CollectDiff collects diff data from the DataDir directory and returns said
-// data in a map[int64][]ScanFile
-func CollectDiff(rootDir string, start int64, end int64) map[int64][]ScanFile {
-	return nil
+// CollectTotalRaw collects the total size change of the target directory
+// from the provided start and end date
+func CollectTotalRaw(rootDir string, start int64, end int64) map[int64]int64 {
+	totalDiff := make(map[int64]int64)
+	collectedMap := CollectRaw(rootDir, start, end)
+
+	for unixTime, scanSlice := range collectedMap {
+		var totalSize int64 = 0
+		for _, scanFile := range scanSlice {
+			totalSize += scanFile.Size
+		}
+		totalDiff[unixTime] = totalSize
+	}
+	return totalDiff
 }
