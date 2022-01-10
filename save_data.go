@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-// SaveToFile saves passed in data to a file in /var/lib/gscan/data/
-func SaveToFile(rootDir string, scanFiles []ScanFile) {
+// SaveToJSON saves passed in data to a file in /var/lib/gscan/data/
+func SaveToJSON(rootDir string, scanFiles []ScanFile) {
 	currentTime := time.Now().Unix()
 	dataFolder := strings.ReplaceAll(rootDir, "/", "_")
 	// Builds file name to save data
 	fileName := DataDir + dataFolder + "-" + fmt.Sprint(currentTime) + ".json"
-	// Build struct for json storage
+	// Builds struct for json storage
 	jsonData := ScanData{
 		UnixTime:  currentTime,
 		RootDir:   rootDir,
