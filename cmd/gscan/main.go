@@ -2,23 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/MitchellWT/gscan"
+	gscan "github.com/MitchellWT/gscan/internal"
 )
 
 // Gets the runtime arguments from cli call. Currently gets:
 // - root directory to record/save
 func getRuntimeArgs() []string {
-	scanDir := os.Args[1]
-	// Removes trailing '/' from root directory input
-	if len(scanDir) > 1 && scanDir[len(scanDir)-1] == '/' {
-		scanDir = scanDir[:len(scanDir)-1]
-	}
-
-	returnArgs := make([]string, 0)
-	returnArgs = append(returnArgs, scanDir)
-	return returnArgs
+	return make([]string, 0)
 }
 
 func main() {
