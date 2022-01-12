@@ -9,11 +9,11 @@ import (
 )
 
 // SaveToJSON saves passed in data to a file in /var/lib/gscan/data/
-func SaveToJSON(rootDir string, outputDir string, scanFiles []ScanFile) string {
+func SaveToJSON(rootDir string, outDir string, scanFiles []ScanFile) string {
 	currentTime := time.Now().Unix()
 	scanFolder := strings.ReplaceAll(rootDir, "/", "_")
 	// Builds file name to save data
-	fileName := outputDir + scanFolder + "-" + fmt.Sprint(currentTime) + ".json"
+	fileName := outDir + scanFolder + "-" + fmt.Sprint(currentTime) + ".json"
 	// Builds struct for json storage
 	jsonData := ScanData{
 		UnixTime:  currentTime,
