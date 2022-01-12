@@ -12,6 +12,7 @@ const (
 	ThreeMonths Interval = 4
 	SixMonths   Interval = 5
 	Year        Interval = 6
+	All         Interval = 7
 )
 
 func (i Interval) String() string {
@@ -30,6 +31,8 @@ func (i Interval) String() string {
 		return "six-months"
 	case Year:
 		return "year"
+	case All:
+		return "all"
 	}
 	return "nil"
 }
@@ -60,10 +63,29 @@ func (i Interval) GetStart() int64 {
 	case Year:
 		yearDiff, _ := time.ParseDuration("8736h")
 		return unixNow - int64(yearDiff.Seconds())
+	case All:
+		return 0
 	}
 	return unixNow
 }
 
 func (i Interval) GetEnd() int64 {
 	return time.Now().Unix()
+}
+
+type ExportType int
+
+const (
+	Total ExportType = 0
+	Raw   ExportType = 1
+)
+
+func (et ExportType) String() string {
+	switch et {
+	case Total:
+		return "total"
+	case Raw:
+		return "raw"
+	}
+	return "nil"
 }
