@@ -3,7 +3,7 @@ package gscan
 import "log"
 
 // Used to log errors and exit out of application
-func errorCheck(err error) {
+func ErrorCheck(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}

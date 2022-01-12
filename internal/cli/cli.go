@@ -42,6 +42,9 @@ var exportCmd = &cobra.Command{
 	},
 }
 
+// TODO: Add more robust input validation
+// ESPECIALLY the rootDir (if end slasg is not added by user the app returns)
+// missing data
 func readCommand(cmd *cobra.Command, args []string) {
 	outDir := cmd.Flag("out-dir").Value.String()
 	rootDir := args[0]
@@ -52,13 +55,32 @@ func readCommand(cmd *cobra.Command, args []string) {
 		return
 	}
 	if _, err := os.Stat(outDir); os.IsNotExist(err) {
+		// NOTE/TODO: Why remove it? Just add check earlier!
 		os.Remove(saveFile)
 		log.Fatal(err)
 	}
 	gscan.SaveToJSON(rootDir, outDir, allFiles)
 }
 
+// TODO: Add more robust input validation
+// ESPECIALLY the rootDir (if end slasg is not added by user the app returns)
+// missing data
 func exportCommand(cmd *cobra.Command, args []string) {
+	outDir := cmd.Flag("out-dir").Value.String()
+	interval, err := gscan.ToInterval(cmd.Flag("interval").Value.String())
+	gscan.ErrorCheck(err)
+
+	exportType, err := gscan.ToExportType(cmd.Flag("type").Value.String())
+	gscan.ErrorCheck(err)
+
+	rootDir := args[0]
+
+	switch exportType {
+	case gscan.Raw:
+		gscan.RawExportToJSON(rootDir, outDir, interval)
+	case gscan.Total:
+		gscan.TotalRawExportToJSON(rootDir, outDir, interval)
+	}
 }
 
 func init() {

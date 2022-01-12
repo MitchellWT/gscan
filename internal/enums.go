@@ -1,19 +1,55 @@
 package gscan
 
-import "time"
+import (
+	"strings"
+	"time"
+)
+
+// TODO: Seperate all enums (and function groups) into their
+// own file
 
 type Interval int
+type UndefinedIntervalError struct{}
+
+func (uete UndefinedIntervalError) Error() string {
+	return "Error: Undefined interval provided!"
+}
 
 const (
-	Hour        Interval = 0
-	Day         Interval = 1
-	Week        Interval = 2
-	Month       Interval = 3
-	ThreeMonths Interval = 4
-	SixMonths   Interval = 5
-	Year        Interval = 6
-	All         Interval = 7
+	IntervalUndefined Interval = -1
+	All               Interval = 0
+	Hour              Interval = 1
+	Day               Interval = 2
+	Week              Interval = 3
+	Month             Interval = 4
+	ThreeMonths       Interval = 5
+	SixMonths         Interval = 6
+	Year              Interval = 7
 )
+
+func ToInterval(s string) (Interval, error) {
+	s = strings.ToLower(s)
+	switch s {
+	case "hour":
+		return Hour, nil
+	case "day":
+		return Day, nil
+	case "week":
+		return Week, nil
+	case "month":
+		return Month, nil
+	case "three-months":
+		return ThreeMonths, nil
+	case "six-months":
+		return SixMonths, nil
+	case "year":
+		return Year, nil
+	case "all":
+		return All, nil
+	default:
+		return IntervalUndefined, UndefinedIntervalError{}
+	}
+}
 
 func (i Interval) String() string {
 	switch i {
@@ -33,8 +69,9 @@ func (i Interval) String() string {
 		return "year"
 	case All:
 		return "all"
+	default:
+		return "nil"
 	}
-	return "nil"
 }
 
 func (i Interval) GetStart() int64 {
@@ -74,11 +111,29 @@ func (i Interval) GetEnd() int64 {
 }
 
 type ExportType int
+type UndefinedExportTypeError struct{}
+
+func (uete UndefinedExportTypeError) Error() string {
+	return "Error: Undefined export type provided!"
+}
 
 const (
-	Total ExportType = 0
-	Raw   ExportType = 1
+	ExportTypeUndefined ExportType = -1
+	Raw                 ExportType = 0
+	Total               ExportType = 1
 )
+
+func ToExportType(s string) (ExportType, error) {
+	s = strings.ToLower(s)
+	switch s {
+	case "total":
+		return Total, nil
+	case "raw":
+		return Raw, nil
+	default:
+		return ExportTypeUndefined, UndefinedExportTypeError{}
+	}
+}
 
 func (et ExportType) String() string {
 	switch et {
@@ -86,6 +141,7 @@ func (et ExportType) String() string {
 		return "total"
 	case Raw:
 		return "raw"
+	default:
+		return "nil"
 	}
-	return "nil"
 }

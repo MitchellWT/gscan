@@ -27,7 +27,7 @@ func ignoreSearch(dirName string, ignoreArr []string) bool {
 // GetAllFiles recursively gets all files in the provided root directory
 func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 	files, err := ioutil.ReadDir(rootDir)
-	errorCheck(err)
+	ErrorCheck(err)
 
 	for _, file := range files {
 		if file.IsDir() {
@@ -54,19 +54,19 @@ func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 	collectedMap := make(map[int64][]ScanFile)
 	files, err := ioutil.ReadDir(DataDir)
-	errorCheck(err)
+	ErrorCheck(err)
 
 	for _, file := range files {
 		fileNameData := strings.Split(file.Name(), "-")
 		fileRootDir := strings.ReplaceAll(fileNameData[0], "_", "/")
 		fileUnixTime, err := strconv.ParseInt(fileNameData[1][:len(fileNameData[1])-5], 10, 64)
-		errorCheck(err)
+		ErrorCheck(err)
 		// Exit earily for undesirable data files
 		if fileRootDir != rootDir || fileUnixTime < start || fileUnixTime > end {
 			continue
 		}
 		fileData, err := os.ReadFile(DataDir + file.Name())
-		errorCheck(err)
+		ErrorCheck(err)
 
 		fileScanData := ScanData{}
 		json.Unmarshal(fileData, &fileScanData)
