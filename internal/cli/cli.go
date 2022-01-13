@@ -42,38 +42,40 @@ var exportCmd = &cobra.Command{
 	},
 }
 
-// TODO: Add more robust input validation
-// ESPECIALLY the rootDir (if end slasg is not added by user the app returns)
-// missing data
-func readCommand(cmd *cobra.Command, args []string) {
-	outDir := cmd.Flag("out-dir").Value.String()
-	rootDir := args[0]
-	allFiles := make([]gscan.ScanFile, 0)
-	allFiles = gscan.GetAllFiles(rootDir, allFiles)
-	saveFile := gscan.SaveToJSON(rootDir, gscan.DataDir, allFiles)
-	if outDir == "" {
-		return
+// checkDir performs some basic checks to ensure that the provided dir path
+// is correct, these included checking last rune and If the dir exists
+func checkDir(inputDir string) string {
+	if rune(inputDir[len(inputDir)-1]) != '/' {
+		inputDir = inputDir + "/"
 	}
-	if _, err := os.Stat(outDir); os.IsNotExist(err) {
-		// NOTE/TODO: Why remove it? Just add check earlier!
-		os.Remove(saveFile)
+	if _, err := os.Stat(inputDir); os.IsNotExist(err) {
 		log.Fatal(err)
 	}
-	gscan.SaveToJSON(rootDir, outDir, allFiles)
+	return inputDir
 }
 
-// TODO: Add more robust input validation
-// ESPECIALLY the rootDir (if end slasg is not added by user the app returns)
-// missing data
-func exportCommand(cmd *cobra.Command, args []string) {
+func readCommand(cmd *cobra.Command, args []string) {
 	outDir := cmd.Flag("out-dir").Value.String()
+	rootDir := checkDir(args[0])
+	allFiles := make([]gscan.ScanFile, 0)
+	allFiles = gscan.GetAllFiles(rootDir, allFiles)
+
+	if outDir != "" {
+		outDir = checkDir(outDir)
+		gscan.SaveToJSON(rootDir, outDir, allFiles)
+	}
+	gscan.SaveToJSON(rootDir, gscan.DataDir, allFiles)
+}
+
+func exportCommand(cmd *cobra.Command, args []string) {
+	outDir := checkDir(cmd.Flag("out-dir").Value.String())
 	interval, err := gscan.ToInterval(cmd.Flag("interval").Value.String())
 	gscan.ErrorCheck(err)
 
 	exportType, err := gscan.ToExportType(cmd.Flag("type").Value.String())
 	gscan.ErrorCheck(err)
 
-	rootDir := args[0]
+	rootDir := checkDir(args[0])
 
 	switch exportType {
 	case gscan.Raw:
