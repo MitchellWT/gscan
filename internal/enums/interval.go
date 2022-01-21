@@ -27,6 +27,8 @@ const (
 func ToInterval(s string) (Interval, error) {
 	s = strings.ToLower(s)
 	switch s {
+	case "all":
+		return All, nil
 	case "hour":
 		return Hour, nil
 	case "day":
@@ -41,8 +43,6 @@ func ToInterval(s string) (Interval, error) {
 		return SixMonths, nil
 	case "year":
 		return Year, nil
-	case "all":
-		return All, nil
 	default:
 		return IntervalUndefined, UndefinedIntervalError{}
 	}
@@ -50,6 +50,8 @@ func ToInterval(s string) (Interval, error) {
 
 func (i Interval) String() string {
 	switch i {
+	case All:
+		return "all"
 	case Hour:
 		return "hour"
 	case Day:
@@ -64,8 +66,6 @@ func (i Interval) String() string {
 		return "six-months"
 	case Year:
 		return "year"
-	case All:
-		return "all"
 	default:
 		return "nil"
 	}

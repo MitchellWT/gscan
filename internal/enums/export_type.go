@@ -18,10 +18,10 @@ const (
 func ToExportType(s string) (ExportType, error) {
 	s = strings.ToLower(s)
 	switch s {
-	case "total":
-		return Total, nil
 	case "raw":
 		return Raw, nil
+	case "total":
+		return Total, nil
 	default:
 		return ExportTypeUndefined, UndefinedExportTypeError{}
 	}
@@ -29,10 +29,10 @@ func ToExportType(s string) (ExportType, error) {
 
 func (et ExportType) String() string {
 	switch et {
-	case Total:
-		return "total"
 	case Raw:
 		return "raw"
+	case Total:
+		return "total"
 	default:
 		return "nil"
 	}
