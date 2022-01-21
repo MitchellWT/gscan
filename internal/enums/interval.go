@@ -1,4 +1,4 @@
-package gscan
+package enums
 
 import (
 	"strings"

@@ -75,9 +75,9 @@ func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 	return collectedMap
 }
 
-// CollectTotalRaw collects the total size change of the target directory
+// CollectTotal collects the total size change of the target directory
 // from the provided start and end date
-func CollectTotalRaw(rootDir string, start int64, end int64) map[int64]int64 {
+func CollectTotal(rootDir string, start int64, end int64) map[int64]int64 {
 	totalDiff := make(map[int64]int64)
 	collectedMap := CollectRaw(rootDir, start, end)
 

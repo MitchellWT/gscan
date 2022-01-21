@@ -5,14 +5,15 @@ import (
 	"os"
 
 	gscan "github.com/MitchellWT/gscan/internal"
+	"github.com/MitchellWT/gscan/internal/enums"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Use:   "gscan [command]",
 	Short: "Gscan allows users to collect file system metadata",
-	Long: "Allows filesystem metadata collection and aggrigation, " +
-		"\nData can be output in aggrigated or raw form.",
+	Long: "Allows filesystem metadata collection and aggrigation, \n" +
+		"Data can be output in aggrigated or raw form.",
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
@@ -21,9 +22,9 @@ var rootCmd = &cobra.Command{
 var readCmd = &cobra.Command{
 	Use:   "read [directory to read]",
 	Short: "Reads filesystem metadata and stores it",
-	Long: "Reads filesystem information (name and size) and stores " +
-		"\nthis information in json format in the " +
-		"\n/var/lib/gscan/data directory.",
+	Long: "Reads filesystem information (name and size) and stores \n" +
+		"this information in json format in the \n" +
+		"/var/lib/gscan/data directory.",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		readCommand(cmd, args)
@@ -34,8 +35,8 @@ var readCmd = &cobra.Command{
 var exportCmd = &cobra.Command{
 	Use:   "export [read directory to export]",
 	Short: "Exports stores filesystem metadata",
-	Long: "Exports filesystem information (name and size) in " +
-		"\none of the provided file formats (default minified JSON).",
+	Long: "Exports filesystem information (name and size) in \n" +
+		"one of the provided file formats (default minified JSON).",
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		exportCommand(cmd, args)
@@ -69,19 +70,19 @@ func readCommand(cmd *cobra.Command, args []string) {
 
 func exportCommand(cmd *cobra.Command, args []string) {
 	outDir := checkDir(cmd.Flag("out-dir").Value.String())
-	interval, err := gscan.ToInterval(cmd.Flag("interval").Value.String())
+	interval, err := enums.ToInterval(cmd.Flag("interval").Value.String())
 	gscan.ErrorCheck(err)
 
-	exportType, err := gscan.ToExportType(cmd.Flag("type").Value.String())
+	exportType, err := enums.ToExportType(cmd.Flag("type").Value.String())
 	gscan.ErrorCheck(err)
 
 	rootDir := checkDir(args[0])
 
 	switch exportType {
-	case gscan.Raw:
+	case enums.Raw:
 		gscan.RawExportToJSON(rootDir, outDir, interval)
-	case gscan.Total:
-		gscan.TotalRawExportToJSON(rootDir, outDir, interval)
+	case enums.Total:
+		gscan.TotalExportToJSON(rootDir, outDir, interval)
 	}
 }
 
@@ -89,20 +90,24 @@ func init() {
 	readCmd.Flags().StringP("out-dir", "o", "", "outputs the current filesystem read in JSON format, to provided dir")
 
 	exportCmd.Flags().StringP("out-dir", "o", "./", "directory where the exported file should be saved to")
-	exportCmd.Flags().StringP("interval", "i", "all", "interval that the export should take data from, this interval "+
-		"\ncan be one of the following values: "+
-		"\n- hour "+
-		"\n- day "+
-		"\n- week "+
-		"\n- month "+
-		"\n- three-months "+
-		"\n- six-months "+
-		"\n- year "+
-		"\n- all")
-	exportCmd.Flags().StringP("type", "t", "raw", "export type denotes how the data should be exported, the data "+
-		"\ncan be exported in the following ways: "+
-		"\n- total: sums all the files in the root directory and returns the total size "+
-		"\n- raw: returns the raw data stored in the data directory copiled together")
+	exportCmd.Flags().StringP("interval", "i", "all", "interval that the export should take data from, this interval \n"+
+		"can be one of the following values: \n"+
+		"- hour \n"+
+		"- day \n"+
+		"- week \n"+
+		"- month \n"+
+		"- three-months \n"+
+		"- six-months \n"+
+		"- year \n"+
+		"- all")
+	exportCmd.Flags().StringP("type", "t", "raw", "export type denotes how the data should be exported, the data \n"+
+		"can be exported in the following ways: \n"+
+		"- total: sums all the files in the root directory and returns the total size \n"+
+		"- raw: returns the raw data stored in the data directory copiled together")
+	exportCmd.Flags().StringP("format", "f", "json", "file format used for exporting, the file can be one of the \n"+
+		"following file formats: \n"+
+		"- html \n"+
+		"- json")
 
 	rootCmd.AddCommand(readCmd)
 	rootCmd.AddCommand(exportCmd)

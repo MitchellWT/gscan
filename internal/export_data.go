@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	enums "github.com/MitchellWT/gscan/internal/enums"
 )
 
-func RawExportToJSON(rootDir string, outDir string, interval Interval) string {
+func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) string {
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
@@ -32,11 +34,11 @@ func RawExportToJSON(rootDir string, outDir string, interval Interval) string {
 	return fileName
 }
 
-func TotalRawExportToJSON(rootDir string, outDir string, interval Interval) string {
+func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) string {
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	totalDiff := CollectTotalRaw(rootDir, intervalStart, intervalEnd)
+	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
 	jsonData := ExportCollectedRaw{
@@ -55,4 +57,15 @@ func TotalRawExportToJSON(rootDir string, outDir string, interval Interval) stri
 	ErrorCheck(err)
 
 	return fileName
+}
+
+func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) string {
+	// currentTime := time.Now().Unix()
+	intervalStart := interval.GetStart()
+	intervalEnd := interval.GetEnd()
+	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
+	// Builds file name to save data
+	// fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
+	fmt.Println(totalDiff)
+	return ""
 }
