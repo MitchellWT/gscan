@@ -76,13 +76,25 @@ func exportCommand(cmd *cobra.Command, args []string) {
 	exportType, err := enums.ToExportType(cmd.Flag("type").Value.String())
 	gscan.ErrorCheck(err)
 
+	fileFormat, err := enums.ToFileFormat(cmd.Flag("format").Value.String())
+	gscan.ErrorCheck(err)
+
 	rootDir := checkDir(args[0])
 
 	switch exportType {
 	case enums.Raw:
-		gscan.RawExportToJSON(rootDir, outDir, interval)
+		switch fileFormat {
+		case enums.JSON:
+			gscan.RawExportToJSON(rootDir, outDir, interval)
+		case enums.HTML:
+		}
 	case enums.Total:
-		gscan.TotalExportToJSON(rootDir, outDir, interval)
+		switch fileFormat {
+		case enums.JSON:
+			gscan.TotalExportToJSON(rootDir, outDir, interval)
+		case enums.HTML:
+			gscan.TotalExportToHTML(rootDir, outDir, interval)
+		}
 	}
 }
 
