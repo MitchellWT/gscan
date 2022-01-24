@@ -30,3 +30,15 @@ type ExportCollectedRaw struct {
 	RootDir       string
 	TotalDiff     map[int64]int64
 }
+
+type TotalHTMLTemplateData struct {
+	Title       string
+	GraphLabels []string
+	DataSets    []HTMLTemplateDataSet
+}
+
+type HTMLTemplateDataSet struct {
+	Label      string
+	LineColour string
+	Data       []float32
+}
