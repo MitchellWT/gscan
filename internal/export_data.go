@@ -12,6 +12,19 @@ import (
 	enums "github.com/MitchellWT/gscan/internal/enums"
 )
 
+func generateRandomLineColour() string {
+	return fmt.Sprintf("rgb(%d, %d, %d)", rand.Intn(255), rand.Intn(255), rand.Intn(255))
+}
+
+func collectMapKeys(inputMap map[int64]interface{}) []int64 {
+	mapKeys := make([]int64, 0)
+	for key, _ := range inputMap {
+		mapKeys = append(mapKeys, key)
+	}
+
+	return mapKeys
+}
+
 func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) string {
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
@@ -60,10 +73,6 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	ErrorCheck(err)
 
 	return fileName
-}
-
-func generateRandomLineColour() string {
-	return fmt.Sprintf("rgb(%d, %d, %d)", rand.Intn(255), rand.Intn(255), rand.Intn(255))
 }
 
 func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) string {
