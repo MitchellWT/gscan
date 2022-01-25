@@ -179,6 +179,42 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 	return fileName
 }
 
+func RawExportToCSV(rootDir string, outDir string, interval enums.Interval) string {
+	currentTime := time.Now().Unix()
+	intervalStart := interval.GetStart()
+	intervalEnd := interval.GetEnd()
+	collectedMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	// Builds file name to save data
+	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
+	csvData := [][]string{
+		{"unix_time", "file_path", "file_size"},
+	}
+
+	for unixTime, ScanFiles := range collectedMap {
+		for _, ScanFile := range ScanFiles {
+			csvData = append(csvData, []string{
+				fmt.Sprint(unixTime),
+				ScanFile.Path,
+				fmt.Sprint(ScanFile.Size),
+			})
+		}
+	}
+
+	err := os.MkdirAll(outDir, 0755)
+	ErrorCheck(err)
+
+	exportFile, err := os.Create(fileName)
+	ErrorCheck(err)
+
+	exportWriter := csv.NewWriter(exportFile)
+	exportWriter.WriteAll(csvData)
+
+	err = exportWriter.Error()
+	ErrorCheck(err)
+
+	return fileName
+}
+
 func TotalExportToCSV(rootDir string, outDir string, interval enums.Interval) string {
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()

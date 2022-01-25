@@ -88,6 +88,8 @@ func exportCommand(cmd *cobra.Command, args []string) {
 			gscan.RawExportToJSON(rootDir, outDir, interval)
 		case enums.HTML:
 			gscan.RawExportToHTML(rootDir, outDir, interval)
+		case enums.CSV:
+			gscan.RawExportToCSV(rootDir, outDir, interval)
 		}
 	case enums.Total:
 		switch fileFormat {
