@@ -1,6 +1,7 @@
 package gscan
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -122,6 +123,9 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	template, err := template.ParseFiles(LibDir + "templates/template.html")
 	ErrorCheck(err)
 
+	err = os.MkdirAll(outDir, 0755)
+	ErrorCheck(err)
+
 	exportFile, err := os.Create(fileName)
 	ErrorCheck(err)
 
@@ -163,10 +167,46 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 	template, err := template.ParseFiles(LibDir + "templates/template.html")
 	ErrorCheck(err)
 
+	err = os.MkdirAll(outDir, 0755)
+	ErrorCheck(err)
+
 	exportFile, err := os.Create(fileName)
 	ErrorCheck(err)
 
 	err = template.Execute(exportFile, templateData)
+	ErrorCheck(err)
+
+	return fileName
+}
+
+func TotalExportToCSV(rootDir string, outDir string, interval enums.Interval) string {
+	currentTime := time.Now().Unix()
+	intervalStart := interval.GetStart()
+	intervalEnd := interval.GetEnd()
+	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
+	// Builds file name to save data
+	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
+	csvData := [][]string{
+		{"unix_time", "total_size"},
+	}
+
+	for unixTime, totalSize := range totalDiff {
+		csvData = append(csvData, []string{
+			fmt.Sprint(unixTime),
+			fmt.Sprint(totalSize),
+		})
+	}
+
+	err := os.MkdirAll(outDir, 0755)
+	ErrorCheck(err)
+
+	exportFile, err := os.Create(fileName)
+	ErrorCheck(err)
+
+	exportWriter := csv.NewWriter(exportFile)
+	exportWriter.WriteAll(csvData)
+
+	err = exportWriter.Error()
 	ErrorCheck(err)
 
 	return fileName

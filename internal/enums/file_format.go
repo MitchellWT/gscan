@@ -13,6 +13,7 @@ const (
 	FileFormatUndefined FileFormat = -1
 	JSON                FileFormat = 0
 	HTML                FileFormat = 1
+	CSV                 FileFormat = 2
 )
 
 func ToFileFormat(s string) (FileFormat, error) {
@@ -22,6 +23,8 @@ func ToFileFormat(s string) (FileFormat, error) {
 		return JSON, nil
 	case "html":
 		return HTML, nil
+	case "csv":
+		return CSV, nil
 	default:
 		return FileFormatUndefined, UndefinedFileFormatError{}
 	}
@@ -33,6 +36,8 @@ func (ff FileFormat) String() string {
 		return "json"
 	case HTML:
 		return "html"
+	case CSV:
+		return "csv"
 	default:
 		return "nil"
 	}

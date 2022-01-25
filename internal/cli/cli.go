@@ -95,6 +95,8 @@ func exportCommand(cmd *cobra.Command, args []string) {
 			gscan.TotalExportToJSON(rootDir, outDir, interval)
 		case enums.HTML:
 			gscan.TotalExportToHTML(rootDir, outDir, interval)
+		case enums.CSV:
+			gscan.TotalExportToCSV(rootDir, outDir, interval)
 		}
 	}
 }
@@ -120,6 +122,7 @@ func init() {
 	exportCmd.Flags().StringP("format", "f", "json", "file format used for exporting, the file can be one of the \n"+
 		"following file formats: \n"+
 		"- html \n"+
+		"- csv \n"+
 		"- json")
 
 	rootCmd.AddCommand(readCmd)
