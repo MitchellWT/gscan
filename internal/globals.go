@@ -8,6 +8,3 @@ func ErrorCheck(err error) {
 		log.Fatal(err)
 	}
 }
-
-// DataDir is a file path for the data directory
-var DataDir = "/var/lib/gscan/data/"

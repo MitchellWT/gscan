@@ -53,7 +53,7 @@ func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 // data in a map[int64][]ScanFile
 func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 	collectedMap := make(map[int64][]ScanFile)
-	files, err := ioutil.ReadDir(DataDir)
+	files, err := ioutil.ReadDir(LibDir + "data/")
 	ErrorCheck(err)
 
 	for _, file := range files {
@@ -65,7 +65,7 @@ func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 		if fileRootDir != rootDir || fileUnixTime < start || fileUnixTime > end {
 			continue
 		}
-		fileData, err := os.ReadFile(DataDir + file.Name())
+		fileData, err := os.ReadFile(LibDir + "data/" + file.Name())
 		ErrorCheck(err)
 
 		fileScanData := ScanData{}

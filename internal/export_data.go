@@ -30,7 +30,7 @@ func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) str
 	err = os.MkdirAll(outDir, 0755)
 	ErrorCheck(err)
 
-	err = os.WriteFile(fileName, jsonBytes, 0766)
+	err = os.WriteFile(fileName, jsonBytes, 0644)
 	ErrorCheck(err)
 
 	return fileName
@@ -55,7 +55,7 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	err = os.MkdirAll(outDir, 0755)
 	ErrorCheck(err)
 
-	err = os.WriteFile(fileName, jsonBytes, 0766)
+	err = os.WriteFile(fileName, jsonBytes, 0644)
 	ErrorCheck(err)
 
 	return fileName

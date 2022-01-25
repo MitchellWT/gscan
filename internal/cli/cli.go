@@ -65,7 +65,7 @@ func readCommand(cmd *cobra.Command, args []string) {
 		outDir = checkDir(outDir)
 		gscan.SaveToJSON(rootDir, outDir, allFiles)
 	}
-	gscan.SaveToJSON(rootDir, gscan.DataDir, allFiles)
+	gscan.SaveToJSON(rootDir, gscan.LibDir+"data/", allFiles)
 }
 
 func exportCommand(cmd *cobra.Command, args []string) {

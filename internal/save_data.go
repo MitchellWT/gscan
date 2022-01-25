@@ -23,9 +23,6 @@ func SaveToJSON(rootDir string, outDir string, scanFiles []ScanFile) string {
 	jsonBytes, err := json.Marshal(jsonData)
 	ErrorCheck(err)
 
-	err = os.MkdirAll(DataDir, 0755)
-	ErrorCheck(err)
-
 	err = os.WriteFile(fileName, jsonBytes, 0766)
 	ErrorCheck(err)
 
