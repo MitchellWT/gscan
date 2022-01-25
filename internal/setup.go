@@ -2,20 +2,20 @@ package gscan
 
 import "os"
 
-var libDir = "/var/lib/gscan/"
+var LibDir = "/var/lib/gscan/"
 
 func preSetupCheck() bool {
-	_, err := os.Stat(libDir + "data/")
+	_, err := os.Stat(LibDir + "data/")
 	if err != nil && os.IsNotExist(err) {
 		return false
 	}
 
-	_, err = os.Stat(libDir + "templates/")
+	_, err = os.Stat(LibDir + "templates/")
 	if err != nil && os.IsNotExist(err) {
 		return false
 	}
 
-	_, err = os.Stat(libDir + "templates/template.html")
+	_, err = os.Stat(LibDir + "templates/template.html")
 	if err != nil && os.IsNotExist(err) {
 		return false
 	}
@@ -24,10 +24,10 @@ func preSetupCheck() bool {
 }
 
 func createDirs() {
-	err := os.MkdirAll(libDir+"data/", 0755)
+	err := os.MkdirAll(LibDir+"data/", 0755)
 	ErrorCheck(err)
 
-	err = os.MkdirAll(libDir+"templates/", 0755)
+	err = os.MkdirAll(LibDir+"templates/", 0755)
 	ErrorCheck(err)
 }
 
@@ -43,6 +43,7 @@ func writeTemplates() {
     <style media="screen">
     	body {
             margin: 0;
+            font-family: sans-serif;
     	}
 
     	h1 {
@@ -143,7 +144,7 @@ func writeTemplates() {
 </body>
 `)
 
-	err := os.WriteFile(libDir+"templates/template.html", templateBytes, 0644)
+	err := os.WriteFile(LibDir+"templates/template.html", templateBytes, 0644)
 	ErrorCheck(err)
 }
 
