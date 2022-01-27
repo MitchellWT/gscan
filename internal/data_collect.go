@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	structs "github.com/MitchellWT/gscan/internal/structs"
 )
 
 var linuxIgnore []string
@@ -25,7 +27,7 @@ func ignoreSearch(dirName string, ignoreArr []string) bool {
 }
 
 // GetAllFiles recursively gets all files in the provided root directory
-func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
+func GetAllFiles(rootDir string, allFiles []structs.ScanFile) []structs.ScanFile {
 	files, err := ioutil.ReadDir(rootDir)
 	ErrorCheck(err)
 
@@ -40,7 +42,7 @@ func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 			if file.Mode()&os.ModeSymlink == os.ModeSymlink {
 				continue
 			}
-			allFiles = append(allFiles, ScanFile{
+			allFiles = append(allFiles, structs.ScanFile{
 				Path: rootDir + "/" + file.Name(),
 				Size: file.Size(),
 			})
@@ -51,8 +53,8 @@ func GetAllFiles(rootDir string, allFiles []ScanFile) []ScanFile {
 
 // CollectRaw collects raw data from the DataDir directory and returns said
 // data in a map[int64][]ScanFile
-func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
-	collectedMap := make(map[int64][]ScanFile)
+func CollectRaw(rootDir string, start int64, end int64) map[int64][]structs.ScanFile {
+	collectedMap := make(map[int64][]structs.ScanFile)
 	files, err := ioutil.ReadDir(LibDir + "data/")
 	ErrorCheck(err)
 
@@ -68,7 +70,7 @@ func CollectRaw(rootDir string, start int64, end int64) map[int64][]ScanFile {
 		fileData, err := os.ReadFile(LibDir + "data/" + file.Name())
 		ErrorCheck(err)
 
-		fileScanData := ScanData{}
+		fileScanData := structs.ScanData{}
 		json.Unmarshal(fileData, &fileScanData)
 		collectedMap[fileScanData.UnixTime] = fileScanData.ScanFiles
 	}

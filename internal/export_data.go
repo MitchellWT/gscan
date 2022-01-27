@@ -10,19 +10,11 @@ import (
 	"time"
 
 	enums "github.com/MitchellWT/gscan/internal/enums"
+	structs "github.com/MitchellWT/gscan/internal/structs"
 )
 
 func generateRandomLineColour() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", rand.Intn(255), rand.Intn(255), rand.Intn(255))
-}
-
-func collectMapKeys(inputMap map[int64]interface{}) []int64 {
-	mapKeys := make([]int64, 0)
-	for key, _ := range inputMap {
-		mapKeys = append(mapKeys, key)
-	}
-
-	return mapKeys
 }
 
 func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) string {
@@ -32,7 +24,7 @@ func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) str
 	collectedMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
-	jsonData := ExportRaw{
+	jsonData := structs.ExportRaw{
 		UnixStartTime: intervalStart,
 		UnixEndTime:   intervalEnd,
 		RootDir:       rootDir,
@@ -57,7 +49,7 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
-	jsonData := ExportCollectedRaw{
+	jsonData := structs.ExportCollectedRaw{
 		UnixStartTime: intervalStart,
 		UnixEndTime:   intervalEnd,
 		RootDir:       rootDir,
@@ -83,7 +75,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
 	labelSlice := make([]string, 0)
-	dataSetMap := make(map[string]HTMLTemplateDataSet, 0)
+	dataSetMap := make(map[string]structs.HTMLTemplateDataSet, 0)
 
 	unixTimeforFileMax := int64(0)
 	maxFileAmout := 0
@@ -96,7 +88,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	}
 
 	for _, scanFile := range collectedMap[unixTimeforFileMax] {
-		initialDataSet := HTMLTemplateDataSet{
+		initialDataSet := structs.HTMLTemplateDataSet{
 			Label:      scanFile.Path,
 			LineColour: generateRandomLineColour(),
 			Data:       make([]float32, len(collectedMap)),
@@ -117,13 +109,13 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 		counter += 1
 	}
 
-	dataSetSlice := make([]HTMLTemplateDataSet, 0)
+	dataSetSlice := make([]structs.HTMLTemplateDataSet, 0)
 
 	for _, DataSet := range dataSetMap {
 		dataSetSlice = append(dataSetSlice, DataSet)
 	}
 
-	templateData := TotalHTMLTemplateData{
+	templateData := structs.TotalHTMLTemplateData{
 		Title:       rootDir + " Export Graph",
 		GraphLabels: labelSlice,
 		DataSets:    dataSetSlice,
@@ -161,11 +153,11 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 		dataSlice = append(dataSlice, outputSize)
 	}
 
-	templateData := TotalHTMLTemplateData{
+	templateData := structs.TotalHTMLTemplateData{
 		Title:       rootDir + " Export Graph",
 		GraphLabels: labelSlice,
-		DataSets: []HTMLTemplateDataSet{
-			HTMLTemplateDataSet{
+		DataSets: []structs.HTMLTemplateDataSet{
+			structs.HTMLTemplateDataSet{
 				Label:      rootDir,
 				LineColour: generateRandomLineColour(),
 				Data:       dataSlice,
