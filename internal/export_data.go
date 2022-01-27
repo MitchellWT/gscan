@@ -74,6 +74,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
+	sortedScanFileKeys := scanFileMap.GetSortedKeys()
 	labelSlice := make([]string, 0)
 	dataSetMap := make(map[string]structs.HTMLTemplateDataSet, 0)
 
@@ -98,10 +99,10 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 
 	counter := 0
 
-	for unixTime, scanFiles := range scanFileMap {
+	for _, unixTime := range sortedScanFileKeys {
 		outputTime := time.Unix(unixTime, 0).Format("15:04 02/01/06")
 
-		for _, scanFile := range scanFiles {
+		for _, scanFile := range scanFileMap[unixTime] {
 			dataSetMap[scanFile.Path].Data[counter] = float32(scanFile.Size) / 1024
 		}
 
@@ -143,12 +144,13 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
+	sortedDiffKeys := totalDiff.GetSortedKeys()
 	labelSlice := make([]string, 0)
 	dataSlice := make([]float32, 0)
 
-	for unixTime, totalSize := range totalDiff {
+	for _, unixTime := range sortedDiffKeys {
 		outputTime := time.Unix(unixTime, 0).Format("15:04 02/01/06")
-		outputSize := float32(totalSize) / 1024
+		outputSize := float32(totalDiff[unixTime]) / 1024
 		labelSlice = append(labelSlice, string(outputTime))
 		dataSlice = append(dataSlice, outputSize)
 	}
@@ -187,16 +189,17 @@ func RawExportToCSV(rootDir string, outDir string, interval enums.Interval) stri
 	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
+	sortedScanFileKeys := scanFileMap.GetSortedKeys()
 	csvData := [][]string{
 		{"unix_time", "file_path", "file_size"},
 	}
 
-	for unixTime, ScanFiles := range scanFileMap {
-		for _, ScanFile := range ScanFiles {
+	for _, unixTime := range sortedScanFileKeys {
+		for _, scanFile := range scanFileMap[unixTime] {
 			csvData = append(csvData, []string{
 				fmt.Sprint(unixTime),
-				ScanFile.Path,
-				fmt.Sprint(ScanFile.Size),
+				scanFile.Path,
+				fmt.Sprint(scanFile.Size),
 			})
 		}
 	}
@@ -223,14 +226,15 @@ func TotalExportToCSV(rootDir string, outDir string, interval enums.Interval) st
 	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
+	sortedDiffKeys := totalDiff.GetSortedKeys()
 	csvData := [][]string{
 		{"unix_time", "total_size"},
 	}
 
-	for unixTime, totalSize := range totalDiff {
+	for _, unixTime := range sortedDiffKeys {
 		csvData = append(csvData, []string{
 			fmt.Sprint(unixTime),
-			fmt.Sprint(totalSize),
+			fmt.Sprint(totalDiff[unixTime]),
 		})
 	}
 

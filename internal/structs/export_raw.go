@@ -13,7 +13,7 @@ type ExportRaw struct {
 	ScanFileMap   ScanFileMap
 }
 
-func (sfm ScanFileMap) GetSortedKey() []int64 {
+func (sfm ScanFileMap) GetSortedKeys() []int64 {
 	scanKeys := make([]int64, 0)
 	for key, _ := range sfm {
 		scanKeys = append(scanKeys, key)

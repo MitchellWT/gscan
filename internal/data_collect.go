@@ -53,7 +53,7 @@ func GetAllFiles(rootDir string, allFiles []structs.ScanFile) []structs.ScanFile
 
 // CollectRaw collects raw data from the DataDir directory and returns said
 // data in a map[int64][]ScanFile
-func CollectRaw(rootDir string, start int64, end int64) map[int64][]structs.ScanFile {
+func CollectRaw(rootDir string, start int64, end int64) structs.ScanFileMap {
 	scanFileMap := make(structs.ScanFileMap)
 	files, err := ioutil.ReadDir(LibDir + "data/")
 	ErrorCheck(err)
@@ -79,7 +79,7 @@ func CollectRaw(rootDir string, start int64, end int64) map[int64][]structs.Scan
 
 // CollectTotal collects the total size change of the target directory
 // from the provided start and end date
-func CollectTotal(rootDir string, start int64, end int64) map[int64]int64 {
+func CollectTotal(rootDir string, start int64, end int64) structs.TotalDiff {
 	totalDiff := make(structs.TotalDiff)
 	collectedMap := CollectRaw(rootDir, start, end)
 
