@@ -1,4 +1,4 @@
-package gscan
+package sorting
 
 func MergeSort(inputSlice []int64) []int64 {
 	if len(inputSlice) <= 1 {
