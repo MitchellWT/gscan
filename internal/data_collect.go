@@ -27,7 +27,12 @@ func ignoreSearch(dirName string, ignoreArr []string) bool {
 }
 
 // GetAllFiles recursively gets all files in the provided root directory
-func GetAllFiles(rootDir string, allFiles []structs.ScanFile) []structs.ScanFile {
+func GetAllFiles(rootDir string) []structs.ScanFile {
+	allFiles := make([]structs.ScanFile, 0)
+	return getFiles(rootDir, allFiles)
+}
+
+func getFiles(rootDir string, allFiles []structs.ScanFile) []structs.ScanFile {
 	files, err := ioutil.ReadDir(rootDir)
 	ErrorCheck(err)
 
@@ -36,7 +41,7 @@ func GetAllFiles(rootDir string, allFiles []structs.ScanFile) []structs.ScanFile
 			if ignoreSearch(file.Name(), linuxIgnore) {
 				continue
 			}
-			allFiles = GetAllFiles(rootDir+"/"+file.Name(), allFiles)
+			allFiles = getFiles(rootDir+"/"+file.Name(), allFiles)
 		} else {
 			// Check If file is a symlink, ignore
 			if file.Mode()&os.ModeSymlink == os.ModeSymlink {

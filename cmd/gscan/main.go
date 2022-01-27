@@ -8,5 +8,4 @@ import (
 func main() {
 	gscan.Setup()
 	cli.Execute()
-	//gscan.RawExportToHTML("/", "./", enums.All)
 }

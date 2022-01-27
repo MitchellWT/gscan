@@ -6,7 +6,6 @@ import (
 
 	gscan "github.com/MitchellWT/gscan/internal"
 	enums "github.com/MitchellWT/gscan/internal/enums"
-	structs "github.com/MitchellWT/gscan/internal/structs"
 	"github.com/spf13/cobra"
 )
 
@@ -59,8 +58,7 @@ func checkDir(inputDir string) string {
 func readCommand(cmd *cobra.Command, args []string) {
 	outDir := cmd.Flag("out-dir").Value.String()
 	rootDir := checkDir(args[0])
-	allFiles := make([]structs.ScanFile, 0)
-	allFiles = gscan.GetAllFiles(rootDir, allFiles)
+	allFiles := gscan.GetAllFiles(rootDir)
 
 	if outDir != "" {
 		outDir = checkDir(outDir)
