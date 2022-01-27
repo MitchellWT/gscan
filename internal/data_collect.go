@@ -13,7 +13,7 @@ import (
 var linuxIgnore []string
 
 func init() {
-	linuxIgnore = append(linuxIgnore, "proc", "run", "dev", "sys")
+	linuxIgnore = append(linuxIgnore, "proc", "run", "dev", "sys", "tmp")
 }
 
 // Search ignore arrays for passed in string
