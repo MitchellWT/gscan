@@ -21,14 +21,14 @@ func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) str
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	collectedMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
 	jsonData := structs.ExportRaw{
 		UnixStartTime: intervalStart,
 		UnixEndTime:   intervalEnd,
 		RootDir:       rootDir,
-		ScanFiles:     collectedMap,
+		ScanFileMap:   scanFileMap,
 	}
 	jsonBytes, err := json.Marshal(jsonData)
 	ErrorCheck(err)
@@ -49,7 +49,7 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
-	jsonData := structs.ExportCollectedRaw{
+	jsonData := structs.ExportCollected{
 		UnixStartTime: intervalStart,
 		UnixEndTime:   intervalEnd,
 		RootDir:       rootDir,
@@ -71,7 +71,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	collectedMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
 	labelSlice := make([]string, 0)
@@ -80,25 +80,25 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	unixTimeforFileMax := int64(0)
 	maxFileAmout := 0
 
-	for unixTime, scanFiles := range collectedMap {
+	for unixTime, scanFiles := range scanFileMap {
 		if len(scanFiles) > maxFileAmout {
 			unixTimeforFileMax = unixTime
 			maxFileAmout = len(scanFiles)
 		}
 	}
 
-	for _, scanFile := range collectedMap[unixTimeforFileMax] {
+	for _, scanFile := range scanFileMap[unixTimeforFileMax] {
 		initialDataSet := structs.HTMLTemplateDataSet{
 			Label:      scanFile.Path,
 			LineColour: generateRandomLineColour(),
-			Data:       make([]float32, len(collectedMap)),
+			Data:       make([]float32, len(scanFileMap)),
 		}
 		dataSetMap[scanFile.Path] = initialDataSet
 	}
 
 	counter := 0
 
-	for unixTime, scanFiles := range collectedMap {
+	for unixTime, scanFiles := range scanFileMap {
 		outputTime := time.Unix(unixTime, 0).Format("15:04 02/01/06")
 
 		for _, scanFile := range scanFiles {
@@ -184,14 +184,14 @@ func RawExportToCSV(rootDir string, outDir string, interval enums.Interval) stri
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	collectedMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
 	csvData := [][]string{
 		{"unix_time", "file_path", "file_size"},
 	}
 
-	for unixTime, ScanFiles := range collectedMap {
+	for unixTime, ScanFiles := range scanFileMap {
 		for _, ScanFile := range ScanFiles {
 			csvData = append(csvData, []string{
 				fmt.Sprint(unixTime),
