@@ -21,7 +21,7 @@ func RawExportToJSON(rootDir string, outDir string, interval enums.Interval) str
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := collectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
 	jsonData := structs.ExportRaw{
@@ -46,7 +46,7 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
+	totalDiff := collectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
 	jsonData := structs.ExportCollected{
@@ -71,7 +71,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := collectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
 	sortedScanFileKeys := scanFileMap.GetSortedKeys()
@@ -141,7 +141,7 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
+	totalDiff := collectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".html"
 	sortedDiffKeys := totalDiff.GetSortedKeys()
@@ -186,7 +186,7 @@ func RawExportToCSV(rootDir string, outDir string, interval enums.Interval) stri
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	scanFileMap := CollectRaw(rootDir, intervalStart, intervalEnd)
+	scanFileMap := collectRaw(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
 	sortedScanFileKeys := scanFileMap.GetSortedKeys()
@@ -223,7 +223,7 @@ func TotalExportToCSV(rootDir string, outDir string, interval enums.Interval) st
 	currentTime := time.Now().Unix()
 	intervalStart := interval.GetStart()
 	intervalEnd := interval.GetEnd()
-	totalDiff := CollectTotal(rootDir, intervalStart, intervalEnd)
+	totalDiff := collectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".csv"
 	sortedDiffKeys := totalDiff.GetSortedKeys()
