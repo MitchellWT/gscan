@@ -1,16 +1,14 @@
-package test
+package gscan
 
 import (
 	"fmt"
 	"os"
 	"testing"
-
-	gscan "github.com/MitchellWT/gscan/internal"
 )
 
 const rootDir = "./testingo"
 
-func setUp() {
+func dataCollectSetUp() {
 	os.Mkdir(rootDir, 0755)
 }
 
@@ -20,9 +18,9 @@ func tearDown() {
 
 func TestGetAllFilesEmpty(t *testing.T) {
 	defer tearDown()
-	setUp()
+	dataCollectSetUp()
 
-	allFiles := gscan.GetAllFiles(rootDir)
+	allFiles := GetAllFiles(rootDir)
 	if len(allFiles) != 0 {
 		t.Errorf("Error: len(allFiles) equals %d, should equal 0", len(allFiles))
 	}
@@ -30,7 +28,7 @@ func TestGetAllFilesEmpty(t *testing.T) {
 
 func TestGetAllFilesDeep(t *testing.T) {
 	defer tearDown()
-	setUp()
+	dataCollectSetUp()
 
 	runningDir := rootDir
 	for i := 0; i < 100; i++ {
@@ -39,7 +37,7 @@ func TestGetAllFilesDeep(t *testing.T) {
 		os.Create(runningDir + "/epic.md")
 	}
 
-	allFiles := gscan.GetAllFiles(rootDir)
+	allFiles := GetAllFiles(rootDir)
 	if len(allFiles) != 100 {
 		t.Errorf("Error: len(allFiles) equals %d, should equal 100", len(allFiles))
 	}
@@ -47,13 +45,13 @@ func TestGetAllFilesDeep(t *testing.T) {
 
 func TestGetAllFilesShallow(t *testing.T) {
 	defer tearDown()
-	setUp()
+	dataCollectSetUp()
 
 	for i := 0; i < 100; i++ {
 		os.Create(rootDir + fmt.Sprintf("/epic_%d.md", i))
 	}
 
-	allFiles := gscan.GetAllFiles(rootDir)
+	allFiles := GetAllFiles(rootDir)
 	if len(allFiles) != 100 {
 		t.Errorf("Error: len(allFiles) equals %d, should equal 100", len(allFiles))
 	}
@@ -61,14 +59,14 @@ func TestGetAllFilesShallow(t *testing.T) {
 
 func TestGetAllFilesSymlink(t *testing.T) {
 	defer tearDown()
-	setUp()
+	dataCollectSetUp()
 
 	originFile := rootDir + "/epic.md"
 	os.Create(originFile)
 	os.Symlink(originFile, rootDir+"/cool.md")
 	os.Symlink(originFile, rootDir+"/groovy.md")
 
-	allFiles := gscan.GetAllFiles(rootDir)
+	allFiles := GetAllFiles(rootDir)
 	if len(allFiles) != 1 {
 		t.Errorf("Error: len(allFiles) equals %d, should equal 1", len(allFiles))
 	}
