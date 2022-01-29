@@ -148,11 +148,12 @@ func writeTemplates() {
 	ErrorCheck(err)
 }
 
-func Setup() {
+func Setup() bool {
 	if preSetupCheck() {
-		return
+		return false
 	}
 
 	createDirs()
 	writeTemplates()
+	return true
 }
