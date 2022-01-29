@@ -49,7 +49,7 @@ func TotalExportToJSON(rootDir string, outDir string, interval enums.Interval) s
 	totalDiff := collectTotal(rootDir, intervalStart, intervalEnd)
 	// Builds file name to save data
 	fileName := outDir + "export-" + fmt.Sprint(currentTime) + ".json"
-	jsonData := structs.ExportCollected{
+	jsonData := structs.ExportTotal{
 		UnixStartTime: intervalStart,
 		UnixEndTime:   intervalEnd,
 		RootDir:       rootDir,
