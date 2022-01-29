@@ -58,3 +58,18 @@ func TestGetAllFilesShallow(t *testing.T) {
 		t.Errorf("Error: len(allFiles) equals %d, should equal 100", len(allFiles))
 	}
 }
+
+func TestGetAllFilesSymlink(t *testing.T) {
+	defer tearDown()
+	setUp()
+
+	originFile := rootDir + "/epic.md"
+	os.Create(originFile)
+	os.Symlink(originFile, rootDir+"/cool.md")
+	os.Symlink(originFile, rootDir+"/groovy.md")
+
+	allFiles := gscan.GetAllFiles(rootDir)
+	if len(allFiles) != 1 {
+		t.Errorf("Error: len(allFiles) equals %d, should equal 1", len(allFiles))
+	}
+}
