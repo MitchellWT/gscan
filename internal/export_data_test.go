@@ -37,11 +37,6 @@ func TestRawExportToJSONPreserveEmpty(t *testing.T) {
 	}
 }
 
-func TestRawExportToJSONBasic(t *testing.T) {
-	exportDataSetUp()
-
-}
-
 func TestTotalExportToJSONPreserveEmpty(t *testing.T) {
 	exportDataSetUp()
 
@@ -60,8 +55,4 @@ func TestTotalExportToJSONPreserveEmpty(t *testing.T) {
 	if len(jsonData.TotalDiff) != 0 {
 		t.Errorf("Error: len(jsonData.TotalDiff) equals %d, should equal 0", len(jsonData.TotalDiff))
 	}
-}
-
-func TestTotalExportToJSONBasic(t *testing.T) {
-	exportDataSetUp()
 }
