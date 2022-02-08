@@ -1,6 +1,6 @@
 package structs
 
-type TotalHTMLTemplateData struct {
+type HTMLTemplateData struct {
 	Title       string
 	GraphLabels []string
 	DataSets    []HTMLTemplateDataSet

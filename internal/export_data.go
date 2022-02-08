@@ -116,7 +116,7 @@ func RawExportToHTML(rootDir string, outDir string, interval enums.Interval) str
 		dataSetSlice = append(dataSetSlice, DataSet)
 	}
 
-	templateData := structs.TotalHTMLTemplateData{
+	templateData := structs.HTMLTemplateData{
 		Title:       rootDir + " Export Graph",
 		GraphLabels: labelSlice,
 		DataSets:    dataSetSlice,
@@ -155,7 +155,7 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 		dataSlice = append(dataSlice, outputSize)
 	}
 
-	templateData := structs.TotalHTMLTemplateData{
+	templateData := structs.HTMLTemplateData{
 		Title:       rootDir + " Export Graph",
 		GraphLabels: labelSlice,
 		DataSets: []structs.HTMLTemplateDataSet{
