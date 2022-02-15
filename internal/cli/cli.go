@@ -3,6 +3,7 @@ package cli
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	gscan "github.com/MitchellWT/gscan/internal"
 	enums "github.com/MitchellWT/gscan/internal/enums"
@@ -55,20 +56,28 @@ func checkDir(inputDir string) string {
 	return inputDir
 }
 
+// relativeToAbsolute converts a provided relative path to an absolute path
+func relativeToAbsolute(inputDir string) string {
+	outDir, err := filepath.Abs(inputDir)
+	gscan.ErrorCheck(err)
+
+	return outDir + "/"
+}
+
 func readCommand(cmd *cobra.Command, args []string) {
 	outDir := cmd.Flag("out-dir").Value.String()
-	rootDir := checkDir(args[0])
+	rootDir := relativeToAbsolute(checkDir(args[0]))
 	allFiles := gscan.GetAllFiles(rootDir)
 
 	if outDir != "" {
-		outDir = checkDir(outDir)
+		outDir = relativeToAbsolute(checkDir(outDir))
 		gscan.SaveToJSON(rootDir, outDir, allFiles)
 	}
 	gscan.SaveToJSON(rootDir, gscan.LibDir+"data/", allFiles)
 }
 
 func exportCommand(cmd *cobra.Command, args []string) {
-	outDir := checkDir(cmd.Flag("out-dir").Value.String())
+	outDir := relativeToAbsolute(checkDir(cmd.Flag("out-dir").Value.String()))
 	interval, err := enums.ToInterval(cmd.Flag("interval").Value.String())
 	gscan.ErrorCheck(err)
 
@@ -78,7 +87,7 @@ func exportCommand(cmd *cobra.Command, args []string) {
 	fileFormat, err := enums.ToFileFormat(cmd.Flag("format").Value.String())
 	gscan.ErrorCheck(err)
 
-	rootDir := checkDir(args[0])
+	rootDir := relativeToAbsolute(checkDir(args[0]))
 
 	switch exportType {
 	case enums.Raw:
