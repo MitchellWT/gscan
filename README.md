@@ -1,5 +1,5 @@
 
-# Gscan
+# gScan
 
 ## About
 
