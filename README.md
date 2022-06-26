@@ -3,7 +3,7 @@
 
 ## About
 
-Gscan is a Linux utility that allows for file system metadata capture and exporting of said collected meta data. Metadata collected includes:
+gScan is a Linux utility that allows for file system metadata capture and exporting of said collected meta data. Metadata collected includes:
 
 - File path
 - File size (in bits)
