@@ -17,6 +17,8 @@ func exportDataSetUp() {
 
 	err = os.MkdirAll(LibDir+"templates/", 0755)
 	ErrorCheck(err)
+
+	writeTemplates()
 }
 
 func TestRawExportToJSONPreserveEmpty(t *testing.T) {
