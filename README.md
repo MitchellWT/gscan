@@ -1,3 +1,4 @@
+![](https://img.shields.io/github/workflow/status/MitchellWT/gscan/Groovy%20Workflow/main?style=flat-square)
 
 # gScan
 
