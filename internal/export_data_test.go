@@ -11,7 +11,7 @@ import (
 	structs "github.com/MitchellWT/gscan/internal/structs"
 )
 
-func exportDataSetUp() {
+func exportDataSetup() {
 	err := os.MkdirAll(LibDir+"data/", 0755)
 	ErrorCheck(err)
 
@@ -21,8 +21,14 @@ func exportDataSetUp() {
 	writeTemplates()
 }
 
+func exportDataTeardown() {
+	os.RemoveAll(LibDir + "data/")
+	os.RemoveAll(LibDir + "templates/")
+}
+
 func TestRawExportToJSONPreserveEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := RawExportToJSON(rootDir, "./", enums.All)
@@ -42,7 +48,8 @@ func TestRawExportToJSONPreserveEmpty(t *testing.T) {
 }
 
 func TestTotalExportToJSONPreserveEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := TotalExportToJSON(rootDir, "./", enums.All)
@@ -62,7 +69,8 @@ func TestTotalExportToJSONPreserveEmpty(t *testing.T) {
 }
 
 func TestRawExportToHTMLPreserveEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := RawExportToHTML(rootDir, "./", enums.All)
@@ -97,7 +105,8 @@ func TestRawExportToHTMLPreserveEmpty(t *testing.T) {
 }
 
 func TestTotalExportToHTMLPreserveEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := TotalExportToHTML(rootDir, "./", enums.All)
@@ -135,7 +144,8 @@ func TestTotalExportToHTMLPreserveEmpty(t *testing.T) {
 }
 
 func TestRawExportToCSVEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := RawExportToCSV(rootDir, "./", enums.All)
@@ -161,7 +171,8 @@ func TestRawExportToCSVEmpty(t *testing.T) {
 }
 
 func TestTotalExportToCSVEmpty(t *testing.T) {
-	exportDataSetUp()
+	defer exportDataTeardown()
+	exportDataSetup()
 
 	rootDir := "I/AM/A/TEST/ROOT/DIR"
 	fileString := TotalExportToCSV(rootDir, "./", enums.All)
