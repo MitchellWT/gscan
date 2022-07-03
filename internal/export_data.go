@@ -159,7 +159,7 @@ func TotalExportToHTML(rootDir string, outDir string, interval enums.Interval) s
 		Title:       rootDir + " Export Graph",
 		GraphLabels: labelSlice,
 		DataSets: []structs.HTMLTemplateDataSet{
-			structs.HTMLTemplateDataSet{
+			{
 				Label:      rootDir,
 				LineColour: generateRandomLineColour(),
 				Data:       dataSlice,
